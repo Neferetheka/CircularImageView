@@ -27,8 +27,6 @@ import android.widget.ImageView;
  * best draw performance and supporting custom borders & selectors.
  */
 public class CircularImageView extends ImageView {
-	// For logging purposes
-	private static final String TAG = CircularImageView.class.getSimpleName();
 
 	// Border & Selector configuration variables
 	private boolean hasBorder;
@@ -166,35 +164,33 @@ public class CircularImageView extends ImageView {
 		this.invalidate();
 	}
 
-	/**
-	 * Enables a dark shadow for this CircularImageView.
-	 * @param shadowEnabled Set to true to render a shadow or false to disable it.
-	 */
-	public void setShadow(boolean shadowEnabled) {
-		this.shadowEnabled = true;
-		if(shadowEnabled) {
-			//paint.setShadowLayer(4.0f, 0.0f, 2.0f, Color.BLACK);
-			paintBorder.setShadowLayer(4.0f, 0.0f, 2.0f, Color.BLACK);
-			paintSelectorBorder.setShadowLayer(4.0f, 0.0f, 2.0f, Color.BLACK);
-		}
-		else {
-			//paint.setShadowLayer(0, 0.0f, 2.0f, Color.BLACK);
-			paintBorder.setShadowLayer(0, 0.0f, 2.0f, Color.BLACK);
-			paintSelectorBorder.setShadowLayer(0, 0.0f, 2.0f, Color.BLACK);
-		}
-	}
+     /**
+     * Enables a dark shadow for this CircularImageView.
+     *
+     * @param shadowEnabled Set to true to render a shadow or false to disable it.
+     */
+    public void setShadow(boolean shadowEnabled) {
+        this.shadowEnabled = true;
+        if (shadowEnabled) {
+            setShadow(4.0f, 0.0f, 2.0f, Color.BLACK);
+        } else {
+            setShadow(0.0f, 0.0f, 2.0f, Color.BLACK);
+        }
+    }
 
-	/**
-	 * Enables a dark shadow for this CircularImageView.
-	 * If the radius is set to 0, the shadow is removed.
-	 * @param radius
-	 * @param dx
-	 * @param dy
-	 * @param color
-	 */
-	public void setShadow(float radius, float dx, float dy, int color) {
-		// TODO
-	}
+    /**
+     * Enables a dark shadow for this CircularImageView.
+     * If the radius is set to 0, the shadow is removed.
+     *
+     * @param radius
+     * @param dx
+     * @param dy
+     * @param color
+     */
+    public void setShadow(float radius, float dx, float dy, int color) {
+        paintBorder.setShadowLayer(radius, dx, dy, color);
+        paintSelectorBorder.setShadowLayer(radius, dx, dy, color);
+    }
 
 	@Override
 	public void onDraw(Canvas canvas) {
@@ -381,7 +377,6 @@ public class CircularImageView extends ImageView {
 		if (drawable == null)   // Don't do anything without a proper drawable
 			return null;
 		else if (drawable instanceof BitmapDrawable) {  // Use the getBitmap() method instead if BitmapDrawable
-			Log.i(TAG, "Bitmap drawable!");
 			return ((BitmapDrawable) drawable).getBitmap();
 		}
 
@@ -399,14 +394,9 @@ public class CircularImageView extends ImageView {
 			drawable.draw(canvas);
 			return bitmap;
 		} catch (OutOfMemoryError e) {
-			// Simply return null of failed bitmap creations
-			Log.e(TAG, "Encountered OutOfMemoryError while generating bitmap!");
 			return null;
 		}
 	}
-
-	// TODO TEST REMOVE
-	public void setIconModeEnabled(boolean e) {}
 
 	/**
 	 * Re-initializes the shader texture used to fill in
